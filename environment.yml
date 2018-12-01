@@ -1,0 +1,12 @@
+name: contactdb_explorer
+channels:
+  - plotly
+  - open3d-admin
+dependencies:
+  - python=3.6
+  - numpy
+  - jupyter
+  - open3d
+  - notebook>=5.3
+  - ipywidgets>=7.2
+  - plotly

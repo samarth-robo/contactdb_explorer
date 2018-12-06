@@ -3,7 +3,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 import urllib.request
 import io
+import plotly.offline as py
 import plotly.graph_objs as go
+import ipywidgets as widgets
+from IPython.display import display
+
+py.init_notebook_mode(connected=True)
 
 def texture_proc(tex, sigmoid_k=10.0, max_frac=0.75):
     idx = tex > 0
@@ -13,6 +18,7 @@ def texture_proc(tex, sigmoid_k=10.0, max_frac=0.75):
     tex[idx] = ci
     colors = plt.cm.inferno(tex)[:, :3]
     return colors
+
 
 def read_ply(filename, sigmoid_k=10.0, max_frac=0.75):
   with urllib.request.urlopen(filename) as r:
@@ -35,3 +41,42 @@ def read_ply(filename, sigmoid_k=10.0, max_frac=0.75):
   mesh['vertexcolor'] = colors
   
   return mesh
+
+
+class UI:
+    def __init__(self, server_name='cayley.cc.gt.atl.ga.us'):
+        self.server_name = server_name
+        with open('object_names.txt', 'r') as f:
+            object_names = [l.strip() for l in f]
+        self.objects_widget = widgets.Dropdown(
+            options=object_names,
+            value=object_names[0],
+            description='Object',
+            disabled=False)
+        self.instruction_widget = widgets.Dropdown(
+            options=['use'],
+            value='use',
+            description='Intent',
+            disabled=False)
+        self.session_widget = widgets.IntSlider(
+            value=1, min=1, max=42, step=1,
+            description='Session',
+            disabled=False,
+            continuous_update=False,
+            orientation='horizontal',
+            readout=True)
+        self.show_button = widgets.Button(description='Show', disabled=False)
+        self.show_button.on_click(self.show_object)
+        display(self.objects_widget,
+                self.session_widget,
+                self.instruction_widget,
+                self.show_button)
+
+    def show_object(self, b):
+        mesh_filename = 'http://{:s}/contactdb_dataset/full{:d}_{:s}_{:s}.ply'.\
+            format(self.server_name, self.session_widget.value,
+                   self.instruction_widget.value, self.objects_widget.value)
+        
+        mesh = read_ply(mesh_filename)
+        fig = go.Figure([mesh])
+        py.iplot(fig)

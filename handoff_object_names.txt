@@ -1,0 +1,48 @@
+airplane
+alarm clock
+apple
+banana
+binoculars
+bowl
+camera
+cell phone
+cube (small)
+cube (medium)
+cube (large)
+cup
+cylinder (small)
+cylinder (medium)
+cylinder (large)
+elephant
+eyeglasses
+flashlight
+flute
+hammer
+headphones
+knife
+light bulb
+mouse
+mug
+pan
+piggy bank
+playstation controller
+pyramid (small)
+pyramid (medium)
+pyramid (large)
+rubber duck
+scissors
+sphere (small)
+sphere (medium)
+sphere (large)
+stanford bunny
+stapler
+toothbrush
+toothpaste
+torus (small)
+torus (medium)
+torus (large)
+train
+utah teapot
+water bottle
+wine glass
+wristwatch

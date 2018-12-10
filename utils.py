@@ -46,11 +46,13 @@ def read_ply(filename, sigmoid_k=10.0, max_frac=0.75):
 class UI:
     def __init__(self, server_name='cayley.cc.gt.atl.ga.us'):
         self.server_name = server_name
-        with open('object_names.txt', 'r') as f:
-            object_names = [l.strip() for l in f]
+        with open('use_object_names.txt', 'r') as f:
+            use_object_names = [l.strip() for l in f]
+        with open('handoff_object_names.txt', 'r') as f:
+            handoff_object_names = [l.strip() for l in f]
         self.objects_widget = widgets.Dropdown(
-            options=object_names,
-            value=object_names[0],
+            options=use_object_names,
+            value=use_object_names[0],
             description='Object',
             disabled=False)
         self.instruction_widget = widgets.Dropdown(
@@ -59,7 +61,7 @@ class UI:
             description='Intent',
             disabled=False)
         self.session_widget = widgets.IntSlider(
-            value=1, min=1, max=42, step=1,
+            value=4, min=1, max=42, step=1,
             description='Session',
             disabled=False,
             continuous_update=False,
@@ -67,6 +69,11 @@ class UI:
             readout=True)
         self.show_button = widgets.Button(description='Show', disabled=False)
         self.show_button.on_click(self.show_object)
+        self.fig = go.Figure(
+            layout={'xaxis': {'visible': False, 'showspikes': False},
+                    'yaxis': {'visible': False, 'showspikes': False},
+                   }
+        )
         display(self.objects_widget,
                 self.session_widget,
                 self.instruction_widget,
@@ -78,5 +85,7 @@ class UI:
                    self.instruction_widget.value, self.objects_widget.value)
         
         mesh = read_ply(mesh_filename)
-        fig = go.Figure([mesh])
-        py.iplot(fig)
+        self.fig.update({
+            'data': [mesh],
+        })
+        py.iplot(self.fig)
